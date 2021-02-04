@@ -1,4 +1,4 @@
-# Japanese Flashcards
+# Kaisou
 Scrapes Japanese-language content on the web and creates anki flashcards based on that content.
 
 ## Dependencies
