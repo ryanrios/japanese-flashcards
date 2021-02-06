@@ -1,0 +1,22 @@
+<entry>
+    <ent_seq>1000280</ent_seq>
+    <k_ele>
+        <keb>論う</keb>
+    </k_ele>
+    <r_ele>
+        <reb>あげつらう</reb>
+    </r_ele>
+    <sense>
+        <pos>&v5u;</pos>
+        <pos>&vt;</pos>
+        <misc>&uk;</misc>
+        <gloss>to discuss</gloss>
+    </sense>
+    <sense>
+        <pos>&v5u;</pos>
+        <pos>&vt;</pos>
+        <gloss>to find fault with</gloss>
+        <gloss>to criticize</gloss>
+        <gloss>to criticise</gloss>
+    </sense>
+</entry>
