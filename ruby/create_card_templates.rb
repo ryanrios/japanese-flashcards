@@ -17,6 +17,7 @@ entries.each do |entry|
     word_readings = []
     parts_of_speech = []
     definitions = []
+    misc_information = []
 
     
 
@@ -32,12 +33,14 @@ entries.each do |entry|
     entry.xpath('sense').each do |sense|
         sense.xpath('pos').each{|pos| if !(parts_of_speech.include?(pos.content)) then parts_of_speech.push(pos.content) end}
         sense.xpath('gloss').each{|definition| if !(definitions.include?(definition.content)) then definitions.push(definition.content) end}
+        sense.xpath('misc').each{|misc| if !(misc_information.include?(misc.content)) then misc_information.push(misc.content) end}
     end
 
 
     puts "KANJI: ", word_kanji
     puts "READINGS: ", word_readings
     puts "PARTS OF SPEECH: ", parts_of_speech
+    puts "MISC: ", misc_information
     puts "DEFINITIONS: ", definitions
     
 
