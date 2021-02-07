@@ -47,7 +47,9 @@ def get_senses(entry)
         end
 
         #misc_information is the only one that could possibly be empty
-        if misc_information.empty? then misc_information = ['none'] end
+        if misc_information.empty? 
+            misc_information = ['none'] 
+        end
         
         sense_info = [parts_of_speech, definitions, misc_information]
         senses.push(sense_info)
@@ -67,7 +69,9 @@ def get_filenames(readings)
     filenames = []
     readings.each do |reading|
         filename = get_file_name(reading[0])
-        if !(filenames.include?(filename)) then filenames.push(filename) end
+        if !(filenames.include?(filename))
+            filenames.push(filename) 
+        end
     end
     return filenames
 end
