@@ -1,21 +1,5 @@
 require 've'
-require 'rexml/document'
 
-include REXML
-
-#find a way to rewrite programs so that Dictionary doc is only opened once and can be perptually open essentially (open in separate program that never
-#closes, find way to feed data to that program?)
-
-# Better idea(???!!): go through evert word in dictionary, make card templates as strings.
-# Keep some mapping of templates to files and just fetch templates instead 
-
-# JMdict for defintion lookup
-# DICTIONARY_XML = File.new("../../JMdict_e/JMdict_e")
-# puts "done!"
-# DICTIONARY_DOC = Document.new(DICTIONARY_XML)
-# puts "done2!"
-
-puts DICTIONARY_DOC.root
 
 # includes certain particles, ending copula です, and punctuation 。、！？
 HELPERS = ["は", "が", "に", "へ", "の", "です", "。", "、", "！", "？"]
