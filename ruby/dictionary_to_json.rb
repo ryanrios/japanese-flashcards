@@ -1,7 +1,7 @@
 require 'nokogiri'
 require 'json'
 
-require 'get_file_name.rb'
+require_relative 'get_file_name'
 
 
 POS_INDEX = 0
@@ -77,7 +77,8 @@ def get_filenames(readings)
 end
 
 
-def entry_to_json(kanji, readings, senses)
+def entry_to_file(kanji, readings, senses)
+    # saves entry info in relevant files
 
     # get the needed filenames
     filenames = get_filenames(readings)
@@ -86,6 +87,7 @@ def entry_to_json(kanji, readings, senses)
     if !kanji.empty?
         kanji.each do |listing|
             filenames.each do |filename|
+                filename = "../card_templates/" + filename
                 target_json = File.read(filename)
                 target_json_dictionary = JSON.parse(target_json)
                 senses.each do |sense|
@@ -103,6 +105,7 @@ def entry_to_json(kanji, readings, senses)
     # do the same but with readings as keys
     readings.each do |reading|
         filenames.each do |filename|
+            filename = "../card_templates/" + filename
             target_json = File.read(filename)
             target_json_dictionary = JSON.parse(target_json)
             senses.each do |sense|
@@ -140,7 +143,7 @@ def analyze_entries(entries)
         readings = get_readings(entry)
         senses = get_senses(entry)
 
-        entry_to_json(kanji, readings, senses)
+        entry_to_file(kanji, readings, senses)
     end
 end
 
