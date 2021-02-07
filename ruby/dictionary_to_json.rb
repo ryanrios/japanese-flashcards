@@ -90,12 +90,12 @@ def entry_to_json(kanji, readings, senses)
                 target_json_dictionary = JSON.parse(target_json)
                 senses.each do |sense|
                     if target_json_dictionary.key?(listing)
-                        target_json_dictionary[listing].append({"readings" => readings, "pos" => sense[POS_INDEX], "definitions" => sense[DEF_INDEX], "misc" => sense[MISC_INDEX]})
+                        target_json_dictionary[listing].append({:readings => readings, :pos => sense[POS_INDEX], :definitions => sense[DEF_INDEX], :misc => sense[MISC_INDEX]})
                     else
-                        target_json_dictionary[listing] => [{"readings" => readings, "pos" => sense[POS_INDEX], "definitions" => sense[DEF_INDEX], "misc" => sense[MISC_INDEX]}]
+                        target_json_dictionary[listing] = [{:readings => readings, :pos => sense[POS_INDEX], :definitions => sense[DEF_INDEX], :misc => sense[MISC_INDEX]}]
                     end
                 end
-                File.open(filename, "w") {|f| f.write(target_json_dictionary.to_json)}
+                File.open(filename, "w") {|f| f.write(JSON.generate(target_json_dictionary))}
             end
         end
     end
@@ -108,19 +108,19 @@ def entry_to_json(kanji, readings, senses)
             senses.each do |sense|
                 if target_json_dictionary.key?(reading)
                     if kanji.empty?
-                        target_json_dictionary[reading].append({"readings" => readings, "pos" => sense[POS_INDEX], "definitions" => sense[DEF_INDEX], "misc" => sense[MISC_INDEX]})
+                        target_json_dictionary[reading].append({:readings => readings, :pos => sense[POS_INDEX], :definitions => sense[DEF_INDEX], :misc => sense[MISC_INDEX]})
                     else
-                        target_json_dictionary[reading].append({"kanji" => kanji, "pos" => sense[POS_INDEX], "definitions" => sense[DEF_INDEX], "misc" => sense[MISC_INDEX]})
+                        target_json_dictionary[reading].append({:kanji => kanji, :pos => sense[POS_INDEX], :definitions => sense[DEF_INDEX], :misc => sense[MISC_INDEX]})
                     end
                 else
                     if kanji.empty?
-                        target_json_dictionary[listing] => [{"readings" => readings, "pos" => sense[POS_INDEX], "definitions" => sense[DEF_INDEX], "misc" => sense[MISC_INDEX]}]
+                        target_json_dictionary[listing] = [{"readings" => readings, "pos" => sense[POS_INDEX], "definitions" => sense[DEF_INDEX], "misc" => sense[MISC_INDEX]}]
                     else
-                        target_json_dictionary[listing] => [{"kanji" => kanji, "pos" => sense[POS_INDEX], "definitions" => sense[DEF_INDEX], "misc" => sense[MISC_INDEX]}]
+                        target_json_dictionary[listing] = [{"kanji" => kanji, "pos" => sense[POS_INDEX], "definitions" => sense[DEF_INDEX], "misc" => sense[MISC_INDEX]}]
                     end
                 end
             end
-            File.open(filename, "w") {|f| f.write(target_json_dictionary.to_json)}
+            File.open(filename, "w") {|f| f.write(JSON.generate(target_json_dictionary))}
         end
     end
 end
