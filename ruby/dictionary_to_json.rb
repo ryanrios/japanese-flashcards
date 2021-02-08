@@ -92,7 +92,7 @@ def entry_to_file(kanji, readings, senses)
                 target_json_dictionary = JSON.parse(target_json)
                 senses.each do |sense|
                     if target_json_dictionary.key?(listing)
-                        target_json_dictionary[listing].append({:readings => readings, :pos => sense[POS_INDEX], :definitions => sense[DEF_INDEX], :misc => sense[MISC_INDEX]})
+                        tar get_json_dictionary[listing].append({:readings => readings, :pos => sense[POS_INDEX], :definitions => sense[DEF_INDEX], :misc => sense[MISC_INDEX]})
                     else
                         target_json_dictionary[listing] = [{:readings => readings, :pos => sense[POS_INDEX], :definitions => sense[DEF_INDEX], :misc => sense[MISC_INDEX]}]
                     end
@@ -117,9 +117,9 @@ def entry_to_file(kanji, readings, senses)
                     end
                 else
                     if kanji.empty?
-                        target_json_dictionary[listing] = [{"readings" => readings, "pos" => sense[POS_INDEX], "definitions" => sense[DEF_INDEX], "misc" => sense[MISC_INDEX]}]
+                        target_json_dictionary[reading] = [{"readings" => readings, "pos" => sense[POS_INDEX], "definitions" => sense[DEF_INDEX], "misc" => sense[MISC_INDEX]}]
                     else
-                        target_json_dictionary[listing] = [{"kanji" => kanji, "pos" => sense[POS_INDEX], "definitions" => sense[DEF_INDEX], "misc" => sense[MISC_INDEX]}]
+                        target_json_dictionary[reading] = [{"kanji" => kanji, "pos" => sense[POS_INDEX], "definitions" => sense[DEF_INDEX], "misc" => sense[MISC_INDEX]}]
                     end
                 end
             end
