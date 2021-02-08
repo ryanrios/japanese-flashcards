@@ -1,5 +1,5 @@
 def get_file_name(character)
-    # we still check hiragana because we don't have a method of easily 
+    # we still check hiragana because we don't have a method of easily
     # distinguishing hiragana from katakana
     case character
     when "あ", "ア"
@@ -8,6 +8,8 @@ def get_file_name(character)
       return "い.json"
     when "う", "ウ"
       return "う.json"
+    when "ゔ", "ヴ"
+      return "ゔ.json"
     when "え", "エ"
       return "え.json"
     when "お", "オ"

@@ -47,10 +47,10 @@ def get_senses(entry)
         end
 
         #misc_information is the only one that could possibly be empty
-        if misc_information.empty? 
-            misc_information = ['none'] 
+        if misc_information.empty?
+            misc_information = ['none']
         end
-        
+
         sense_info = [parts_of_speech, definitions, misc_information]
         senses.push(sense_info)
     end
@@ -70,7 +70,7 @@ def get_filenames(readings)
     readings.each do |reading|
         filename = get_file_name(reading[0])
         if !(filenames.include?(filename))
-            filenames.push(filename) 
+            filenames.push(filename)
         end
     end
     return filenames
@@ -80,12 +80,12 @@ end
 def entry_to_file(kanji, readings, senses)
     # saves entry info in relevant files
 
-    # get the needed filenames
-    filenames = get_filenames(readings)
-    
+
     # start by saving kanji (if those exist) with associated info
     if !kanji.empty?
         kanji.each do |listing|
+            # get the needed filenames
+            filenames = get_filenames(readings)
             filenames.each do |filename|
                 filename = "../card_templates/" + filename
                 target_json = File.read(filename)
@@ -104,6 +104,8 @@ def entry_to_file(kanji, readings, senses)
 
     # do the same but with readings as keys
     readings.each do |reading|
+        # get the needed filenames
+        filenames = get_filenames(reading)
         filenames.each do |filename|
             filename = "../card_templates/" + filename
             target_json = File.read(filename)
