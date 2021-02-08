@@ -7,6 +7,8 @@ require_relative 'get_file_name'
 POS_INDEX = 0
 DEF_INDEX = 1
 MISC_INDEX = 2
+FIELDS_INDEX = 3
+XREF_INDEX = 4
 
 
 
@@ -35,6 +37,8 @@ def get_senses(entry)
         parts_of_speech = []
         definitions = []
         misc_information = []
+        fields = []
+        see_also = []
 
         sense.xpath('pos').each do |pos|
             parts_of_speech.push(pos.content)
@@ -45,20 +49,32 @@ def get_senses(entry)
         sense.xpath('misc').each do |misc|
             misc_information.push(misc.content)
         end
+        sense.xpath('field').each do |field|
+            fields.push(field.content)
+        end
+        sense.xpath('xref').each do |reference|
+            see_also.push(reference)
+        end
 
-        #misc_information is the only one that could possibly be empty
+        # pos and gloss will always have at least one associated entry
         if misc_information.empty?
             misc_information = ['none']
         end
+        if fields.empty?
+            fields = ['none']
+        end
+        if see_also.empty?
+            see_also = ['none']
+        end
 
-        sense_info = [parts_of_speech, definitions, misc_information]
+        sense_info = [parts_of_speech, definitions, misc_information, fields, see_also]
         senses.push(sense_info)
     end
     return senses
 end
 
 
-def get_filenames(readings)
+def generate_filenames(readings)
     # get all the filenames this word will be saved under
     # sorted by first kana character in reading (normalized to hiragana)
     # ie if a word can start with い, イ, ゆ, or ユ then we know to save it under
@@ -85,16 +101,16 @@ def entry_to_file(kanji, readings, senses)
     if !kanji.empty?
         kanji.each do |listing|
             # get the needed filenames
-            filenames = get_filenames(readings)
+            filenames = generate_filenames(readings)
             filenames.each do |filename|
                 filename = "../card_templates/" + filename
                 target_json = File.read(filename)
                 target_json_dictionary = JSON.parse(target_json)
                 senses.each do |sense|
                     if target_json_dictionary.key?(listing)
-                        tar get_json_dictionary[listing].append({:readings => readings, :pos => sense[POS_INDEX], :definitions => sense[DEF_INDEX], :misc => sense[MISC_INDEX]})
+                        tar get_json_dictionary[listing].append({:readings => readings, :pos => sense[POS_INDEX], :definitions => sense[DEF_INDEX], :misc => sense[MISC_INDEX], :fields => sense[FIELDS_INDEX], :references => sense[XREF_INDEX]})
                     else
-                        target_json_dictionary[listing] = [{:readings => readings, :pos => sense[POS_INDEX], :definitions => sense[DEF_INDEX], :misc => sense[MISC_INDEX]}]
+                        target_json_dictionary[listing] = [{:readings => readings, :pos => sense[POS_INDEX], :definitions => sense[DEF_INDEX], :misc => sense[MISC_INDEX], :fields => sense[FIELDS_INDEX], :references => sense[XREF_INDEX]}]
                     end
                 end
                 File.open(filename, "w") {|f| f.write(JSON.generate(target_json_dictionary))}
@@ -104,29 +120,26 @@ def entry_to_file(kanji, readings, senses)
 
     # do the same but with readings as keys
     readings.each do |reading|
-        # get the needed filenames
-        filenames = get_filenames(reading)
-        filenames.each do |filename|
-            filename = "../card_templates/" + filename
-            target_json = File.read(filename)
-            target_json_dictionary = JSON.parse(target_json)
-            senses.each do |sense|
-                if target_json_dictionary.key?(reading)
-                    if kanji.empty?
-                        target_json_dictionary[reading].append({:readings => readings, :pos => sense[POS_INDEX], :definitions => sense[DEF_INDEX], :misc => sense[MISC_INDEX]})
-                    else
-                        target_json_dictionary[reading].append({:kanji => kanji, :pos => sense[POS_INDEX], :definitions => sense[DEF_INDEX], :misc => sense[MISC_INDEX]})
-                    end
+        # we do per reading so generate_filenames will only generate one reading
+        filename = "../card_templates/" + generate_filenames([reading])
+        target_json = File.read(filename)
+        target_json_dictionary = JSON.parse(target_json)
+        senses.each do |sense|
+            if target_json_dictionary.key?(reading)
+                if kanji.empty?
+                    target_json_dictionary[reading].append({:readings => readings, :pos => sense[POS_INDEX], :definitions => sense[DEF_INDEX], :misc => sense[MISC_INDEX], :fields => sense[FIELDS_INDEX], :references => sense[XREF_INDEX]})
                 else
-                    if kanji.empty?
-                        target_json_dictionary[reading] = [{"readings" => readings, "pos" => sense[POS_INDEX], "definitions" => sense[DEF_INDEX], "misc" => sense[MISC_INDEX]}]
-                    else
-                        target_json_dictionary[reading] = [{"kanji" => kanji, "pos" => sense[POS_INDEX], "definitions" => sense[DEF_INDEX], "misc" => sense[MISC_INDEX]}]
-                    end
+                    target_json_dictionary[reading].append({:kanji => kanji, :pos => sense[POS_INDEX], :definitions => sense[DEF_INDEX], :misc => sense[MISC_INDEX], :fields => sense[FIELDS_INDEX], :references => sense[XREF_INDEX]})
+                end
+            else
+                if kanji.empty?
+                    target_json_dictionary[reading] = [{:readings => readings, :pos => sense[POS_INDEX], :definitions => sense[DEF_INDEX], :misc => sense[MISC_INDEX], :fields => sense[FIELDS_INDEX], :references => sense[XREF_INDEX]}]
+                else
+                    target_json_dictionary[reading] = [{:kanji => kanji, :pos => sense[POS_INDEX], :definitions => sense[DEF_INDEX], :misc => sense[MISC_INDEX], :fields => sense[FIELDS_INDEX], :references => sense[XREF_INDEX]}]
                 end
             end
-            File.open(filename, "w") {|f| f.write(JSON.generate(target_json_dictionary))}
         end
+        File.open(filename, "w") {|f| f.write(JSON.generate(target_json_dictionary))}
     end
 end
 
