@@ -53,7 +53,7 @@ def get_senses(entry)
             fields.push(field.content)
         end
         sense.xpath('xref').each do |reference|
-            see_also.push(reference)
+            see_also.push(reference.content)
         end
 
         # pos and gloss will always have at least one associated entry
@@ -108,7 +108,7 @@ def entry_to_file(kanji, readings, senses)
                 target_json_dictionary = JSON.parse(target_json)
                 senses.each do |sense|
                     if target_json_dictionary.key?(listing)
-                        tar get_json_dictionary[listing].append({:readings => readings, :pos => sense[POS_INDEX], :definitions => sense[DEF_INDEX], :misc => sense[MISC_INDEX], :fields => sense[FIELDS_INDEX], :references => sense[XREF_INDEX]})
+                        target_json_dictionary[listing].append({:readings => readings, :pos => sense[POS_INDEX], :definitions => sense[DEF_INDEX], :misc => sense[MISC_INDEX], :fields => sense[FIELDS_INDEX], :references => sense[XREF_INDEX]})
                     else
                         target_json_dictionary[listing] = [{:readings => readings, :pos => sense[POS_INDEX], :definitions => sense[DEF_INDEX], :misc => sense[MISC_INDEX], :fields => sense[FIELDS_INDEX], :references => sense[XREF_INDEX]}]
                     end
@@ -121,7 +121,7 @@ def entry_to_file(kanji, readings, senses)
     # do the same but with readings as keys
     readings.each do |reading|
         # we do per reading so generate_filenames will only generate one reading
-        filename = "../card_templates/" + generate_filenames([reading])
+        filename = "../card_templates/" + generate_filenames([reading])[0]
         target_json = File.read(filename)
         target_json_dictionary = JSON.parse(target_json)
         senses.each do |sense|
